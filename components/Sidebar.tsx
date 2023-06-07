@@ -10,11 +10,17 @@ import { Box } from './Box';
 import { SidebarItem } from './SidebarItem';
 import { Library } from './Library';
 
+import type { Song } from '@/@types/types';
+
 interface SidebarProps {
   children: React.ReactNode;
+  songs: Song[];
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ children }): JSX.Element => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  children,
+  songs,
+}): JSX.Element => {
   const pathname = usePathname();
 
   const routes = React.useMemo(() => {
@@ -65,7 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }): JSX.Element => {
         </Box>
 
         <Box className="overflow-y-auto h-full">
-          <Library />
+          <Library songs={songs} />
         </Box>
       </div>
 
