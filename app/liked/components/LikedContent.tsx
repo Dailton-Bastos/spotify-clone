@@ -1,15 +1,28 @@
 'use client';
 
-import { Song } from '@/@types/types';
+import React from 'react';
+import { useRouter } from 'next/navigation';
+
 import { LikeButton } from '@/components/LikeButton';
 import { MediaItem } from '@/components/MediaItem';
-import React from 'react';
+import { useUser } from '@/hooks/useUser';
 
-interface SearchContentProps {
+import type { Song } from '@/@types/types';
+
+interface LikedContentProps {
   songs: Song[];
 }
 
-export const SearchContent: React.FC<SearchContentProps> = ({ songs }) => {
+export const LikedContent: React.FC<LikedContentProps> = ({ songs }) => {
+  const router = useRouter();
+  const { isLoading, user } = useUser();
+
+  React.useEffect(() => {
+    if (!isLoading && !user) {
+      router.replace('/');
+    }
+  }, [isLoading, user, router]);
+
   if (songs.length === 0) {
     return (
       <div
@@ -22,24 +35,16 @@ export const SearchContent: React.FC<SearchContentProps> = ({ songs }) => {
           text-neutral-400
         "
       >
-        No songs found.
+        No liked songs.
       </div>
     );
   }
   return (
-    <div
-      className="
-        flex
-        flex-col
-        gap-y-2
-        w-full
-        px-6
-      "
-    >
+    <div className="flex flex-col gap-y-2 w-full p-6">
       {songs?.map((song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1">
-            <MediaItem data={song} onClick={() => {}} />
+            <MediaItem onClick={() => {}} data={song} />
           </div>
 
           <LikeButton songId={song.id} />
