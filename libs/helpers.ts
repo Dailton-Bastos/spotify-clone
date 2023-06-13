@@ -1,5 +1,4 @@
 import type { Price } from '@/@types/types';
-import { json } from 'stream/consumers';
 
 export const getURL = () => {
   let url =
@@ -47,4 +46,12 @@ export const toDateTime = (secs: number) => {
   t.setSeconds(secs);
 
   return t;
+};
+
+export const formatPrice = (price: Price) => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: price?.currency ?? 'BRL',
+    minimumFractionDigits: 2,
+  }).format((price?.unit_amount ?? 0) / 100);
 };
